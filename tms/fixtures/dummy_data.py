@@ -36,7 +36,7 @@ def testexecs(f):
     for j in range(1,4): # product
         for k in range(1, 4): #fw_rel
             title = "nightly test execution " + str(pk)
-            f.write('{"model":"tms.testexec", "pk":%d, "fields":{"title": "%s", "dut":%d, "dut_fw":%d, "testsys_ver":"1.0.0", "testnode":"TEST-1", "td1": "td_2.6.17", "td2":"btd800_2.6.17" } },\n' %(pk, title, j, k))
+            f.write('{"model":"tms.testexec", "pk":%d, "fields":{"title": "%s", "dut":%d, "dut_fw":%d, "testsys_ver":"1.0.0", "td1": "td_2.6.17", "td2":"btd800_2.6.17" } },\n' %(pk, title, j, pk))
             pk+=1
  
 def testresults(f):
@@ -44,7 +44,7 @@ def testresults(f):
     for i in range(1, 10):  # testexecs
         for j in range(1, 101): #testcase
             res = verdict[random.randint(0,2)]
-            f.write('{"model":"tms.testresult", "pk":%d, "fields":{"testexec":%d, "testcase":%d, "result":"%s"}},\n' %(pk, i, j, res))
+            f.write('{"model":"tms.testresult", "pk":%d, "fields":{"testexec":%d, "testcase":%d, "testnode":"TEST-1", "result":"%s"}},\n' %(pk, i, j, res))
             pk+=1
 
 if "__main__" == __name__: 

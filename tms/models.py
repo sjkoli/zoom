@@ -67,7 +67,6 @@ class TestExec(models.Model):
     dut = models.ForeignKey(Product, on_delete=models.CASCADE)
     dut_fw = models.ForeignKey(Release, on_delete=models.CASCADE)
     testsys_ver = models.CharField(max_length=50)  # robotaf tag or master
-    testnode = models.CharField(max_length=50)
     td1 = models.CharField(max_length=100, blank=True, null=True)  # product_name_with_fw_version
     td2 = models.CharField(max_length=100, blank=True, null=True)  # product_name_with_fw_version
     
@@ -99,5 +98,6 @@ class Defect(models.Model):
 class TestResult(models.Model):
     testexec = models.ForeignKey(TestExec, on_delete=models.CASCADE)
     testcase = models.ForeignKey(Testcase, on_delete=models.CASCADE)
+    testnode = models.CharField(max_length=50)
     result = models.CharField(max_length=20)
     

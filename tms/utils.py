@@ -65,3 +65,10 @@ def get_grid_cols_def(obj):
     #return json.dumps(columns, cls=MyJSONEncoder)
     return columns
 
+def normalize_data(raw_data):
+    data = []
+    for d in raw_data:
+        p = d['fields']
+        p['id'] = d['pk']
+        data.append(p)
+    return data

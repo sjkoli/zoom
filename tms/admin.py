@@ -8,7 +8,7 @@ admin.site.register(Testcase)
 admin.site.register(Tag)
 
 class TestExecAdmin(admin.ModelAdmin):
-    list_display = ('title', 'dut', 'dut_fw', 'testsys_ver', 'testnode', 'td1', 'td2')
+    list_display = ('title', 'dut', 'dut_fw', 'testsys_ver', 'td1', 'td2')
 
 admin.site.register(TestExec, TestExecAdmin)
 
