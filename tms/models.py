@@ -69,6 +69,7 @@ class TestExec(models.Model):
     testsys_ver = models.CharField(max_length=50)  # robotaf tag or master
     td1 = models.CharField(max_length=100, blank=True, null=True)  # product_name_with_fw_version
     td2 = models.CharField(max_length=100, blank=True, null=True)  # product_name_with_fw_version
+    created = models.DateTimeField()
     
     """
     def natural_key(self):

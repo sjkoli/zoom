@@ -7,6 +7,15 @@ const fwRelTableBody = document.querySelector("#table-fw-rel > tbody")
 let listsOfFws = []
 const maxLimitForFw = 10
 
+//=====
+let grid;
+let data = [];
+const gridOptions = {
+    enableCellNavigation: true,
+    enableColumnReorder: true    
+};
+
+
 productSelector.addEventListener("change", productSelectListener)
 addFwButton.addEventListener("click", addFwRelListener)
 getDataButton.addEventListener("click", getData)
@@ -47,7 +56,6 @@ function productSelectListener(){
     }
 }
  
-
 function addFwRelListener(){
    product = productSelector.selectedOptions[0].text
    
@@ -104,12 +112,14 @@ function deleteRowListerner(){
 function getData(){
     console.log(listsOfFws)
     const ids = listsOfFws.map((item) => item.id)
-    console.log(ids)
     query = new URLSearchParams({"fws":ids}).toString()
-    console.log(query);
     fetch(`testresults\?${query}`)
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data =>  {
+        console.log(data)
+        grid = new Slick.Grid("#myGrid", data.data, data.columns, gridOptions);
+    })
 }
 
 fetchProducts();
+

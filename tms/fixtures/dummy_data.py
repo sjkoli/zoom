@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 projects = ['Ford', 'VW', 'Audi' ]
 products = ['Focus', 'Polo', 'A6']
 releases = ['1.5', '2.1', '3.0']
@@ -35,8 +36,9 @@ def testexecs(f):
     pk=1
     for j in range(1,4): # product
         for k in range(1, 4): #fw_rel
+            d = datetime.fromisoformat('2012-11-0%d'%k)
             title = "nightly test execution " + str(pk)
-            f.write('{"model":"tms.testexec", "pk":%d, "fields":{"title": "%s", "dut":%d, "dut_fw":%d, "testsys_ver":"1.0.0", "td1": "td_2.6.17", "td2":"btd800_2.6.17" } },\n' %(pk, title, j, pk))
+            f.write('{"model":"tms.testexec", "pk":%d, "fields":{"title": "%s", "dut":%d, "dut_fw":%d, "testsys_ver":"1.0.0", "td1": "td_2.6.17", "td2":"btd800_2.6.17", "created": "%s"} },\n' %(pk, title, j, pk, d))
             pk+=1
  
 def testresults(f):
