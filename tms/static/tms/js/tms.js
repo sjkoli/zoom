@@ -4,12 +4,10 @@ const addFwButton = document.querySelector("#btn-add-fw-rel")
 const getDataButton = document.querySelector("#btn-get-data")
 const fwRelTableBody = document.querySelector("#table-fw-rel > tbody")
 
-let listsOfFws = []
+let listOfFw = []
 const maxLimitForFw = 10
 
-//=====
 let grid;
-let data = [];
 const gridOptions = {
     enableCellNavigation: true,
     enableColumnReorder: true    
@@ -63,9 +61,9 @@ function addFwRelListener(){
        const item  = {"product": product, 
        "fwRel": releaseSelector.selectedOptions[i].text, 
        "id": releaseSelector.selectedOptions[i].value }
-        if (listsOfFws.length < 10){
-            listsOfFws.push(item);
-            renderRowInTable(item, listsOfFws.length)
+        if (listOfFw.length < 10){
+            listOfFw.push(item);
+            renderRowInTable(item, listOfFw.length)
         }else{
             alert(`Maximum ${maxLimitForFw} fw release can be added to the list`)
             // @TODO shall we disable btn-add-rel button or not ? 
@@ -104,19 +102,19 @@ function renderRowInTable(data, index){
 
 function deleteRowListerner(){
     const row = this.closest('tr')
-    const newlist = listsOfFws.filter((item) => item.id !== row.getAttribute("value"));
-    listsOfFws = newlist
+    const newlist = listOfFw.filter((item) => item.id !== row.getAttribute("value"));
+    listOfFw = newlist
     row.remove();
 }
 
 function getData(){
-    console.log(listsOfFws)
-    const ids = listsOfFws.map((item) => item.id)
+    //console.log(listOfFw)
+    const ids = listOfFw.map((item) => item.id)
     query = new URLSearchParams({"fws":ids}).toString()
     fetch(`testresults\?${query}`)
     .then(res => res.json())
     .then(data =>  {
-        console.log(data)
+        //console.log(data)
         grid = new Slick.Grid("#myGrid", data.data, data.columns, gridOptions);
     })
 }

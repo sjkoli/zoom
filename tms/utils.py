@@ -4,6 +4,12 @@ import json
 import datetime
 import decimal
 
+DEBUG = False
+
+def debug_info(text):
+    if DEBUG:
+        print(text)
+
 class ColDef():
     
     def __init__(self, idx, name, field, width=120, minWidth=50, 
@@ -22,7 +28,6 @@ class ColDef():
         self.selectable = selectable
         self.sortable = sortable
         
-
     
 class MyJSONEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -36,7 +41,8 @@ class MyJSONEncoder(json.JSONEncoder):
             return obj.__dict__
         else:
             return super(MyJSONEncoder, self).default(obj)
-        
+
+     
 def get_fields_name(obj):
     fields = []
     if isinstance(obj, Model):
@@ -67,28 +73,24 @@ def get_grid_cols_def(obj):
     #return json.dumps(columns, cls=MyJSONEncoder)
     return columns
 
-def normalize_data(raw_data):
+def normalize(raw_data, include_id=True):
     data = []
     for d in raw_data:
         p = d['fields']
-        p['id'] = d['pk']
+        if include_id:
+            p['id'] = d['pk']
         data.append(p)
     return data
 
-def normalize_data_without_id(raw_data):
-    data = []
-    for d in raw_data:
-        p = d['fields']
-        data.append(p)
-    return data
-
-def normalize(data):
+def normalize_data(data, add_index=True):
     res = []
     i=1
     for k, v in data.items():
-        v['id'] = i
+        if add_index:
+            v['id'] = i
+            i=i+1
         res.append(v)
-        i=i+1
+        
     return res
 
 def normalize_col(data):
@@ -98,8 +100,7 @@ def normalize_col(data):
         res.append(x)
     return res
 
-def merge(query_data, join_on, index, value):
-    
+def prepare_response(query_data, join_on, index, value):
     res = {}
     res['data'] = {}
     res['columns'] ={"id": {"name": "S.N.", "id": "id"},
@@ -107,15 +108,14 @@ def merge(query_data, join_on, index, value):
                     }
     for d  in query_data:
         for key in d:
-           res = transform(d[key], join_on, index, value, res['data'], res['columns'])
+           res = merge(d[key], join_on, index, value, res['data'], res['columns'])
     
-    res['data'] = normalize(res['data'])
+    res['data'] = normalize_data(res['data'])
     res['columns'] = normalize_col(res['columns'])
-
     return res
         
 
-def transform(query_data, join_on, index, value, data, columns):
+def merge(query_data, join_on, index, value, data, columns):
     res = {}
     for d in query_data:
         suffix = d[index]
@@ -133,9 +133,9 @@ def transform(query_data, join_on, index, value, data, columns):
                 columns[id] = { "name": "%s"%suffix, "id": id}
             else:
                 data[key][id] = v
-                # only results columns not any other. 
+                # only results columns included, not any other column. 
                     
-
     res['columns'] = columns
     res['data'] = data   
     return res
+
